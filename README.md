@@ -27,12 +27,18 @@ Version 2.0 is optimized for Stata 16+ and introduces intelligent sequencing, pe
 
 ## 🛠️ Installation
 
-Clone this repository or place `slideviewer.ado` and `slideviewer.sthlp` in your Stata `personal/s/` folder.
+Install from GitHub in Stata:
 
 ```stata
-* Manual Installation:
-* Copy slideviewer.ado and slideviewer.sthlp to your PLUS or PERSONAL ado folder.
+net install slideviewer, from("https://raw.githubusercontent.com/ericabooth/Slideviewer-Stata/main/") replace force
+discard
+which slideviewer
+help slideviewer
 ```
+
+The repository ships `slideviewer.pkg` and `stata.toc`, so the command and its
+help file arrive in one call. To install by hand instead, copy `slideviewer.ado`
+and `slideviewer.sthlp` into your PLUS or PERSONAL ado folder.
 
 ---
 
@@ -79,6 +85,7 @@ slideviewer toc
 ## 👤 Author
 
 **Eric A. Booth**
+- 🏛️ Sr Researcher, Texas 2036
 - 📧 [eric.a.booth@gmail.com](mailto:eric.a.booth@gmail.com)
 - 🌐 [www.eric-booth.com](http://www.eric-booth.com)
 - 💼 [GitHub Profile](https://github.com/ericabooth)

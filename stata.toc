@@ -1,0 +1,4 @@
+v 3
+d slideviewer: navigate SMCL slides, presentations, and tutorials in the Stata Viewer
+d Eric A. Booth, Sr Researcher, Texas 2036, eric.a.booth@gmail.com
+p slideviewer

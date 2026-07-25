@@ -1,0 +1,21 @@
+v 3
+d slideviewer: navigate SMCL slides, presentations, and tutorials in the Stata Viewer
+d
+d slideviewer turns a folder of .smcl files into an interactive presentation or
+d tutorial inside the Stata Viewer, so a deck needs no hard-coded Next and
+d Previous links in each slide.  Move through the deck alphabetically with next,
+d prev, first, and last; the navbar option injects a clickable
+d [First] [Prev] [TOC] [Next] [Last] header and footer into any slide as it is
+d shown.  slideviewer toc builds a clickable table of contents of every .smcl
+d file in the project directory.  The project subdirectory is set once and
+d remembered for the rest of the session.  Fully UTF-8 aware.
+d
+d Requires: Stata 16.0 or newer
+d
+d Author: Eric A. Booth, Sr Researcher, Texas 2036
+d Support: eric.a.booth@gmail.com
+d
+d Distribution-Date: 20260725
+d
+f slideviewer.ado
+f slideviewer.sthlp
