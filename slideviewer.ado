@@ -1,6 +1,9 @@
+*! version 2.0.2  09nov2026  Eric A. Booth <eric.a.booth@gmail.com>
 *! slideviewer.ado - manage and navigate SMCL slides in the Stata Viewer
-*! Eric A. Booth <eric.a.booth@gmail.com>
-*! Version 2.0.1 : Last Updated: 9 Nov 2026
+** Version 2.0.2 : Nov 2026 - slide names keep their case (matched to the file on disk
+**                 without regard to case), so next/prev work after opening a mixed-case
+**                 slide by name and TOC links work on case-sensitive file systems;
+**                 backslashes in subdir() are normalized; standard version line
 ** Version 2.0.1 : Nov 2026 - quoted subdir() kept as a path (was reset to ./ignore);
 **                 a missing subdir() now errors instead of falling back; leading ~
 **                 expanded from HOME/USERPROFILE; navbar copies slide text verbatim
@@ -26,7 +29,7 @@ program define slideviewer, rclass
         _sv_expand_home `"`macval(subdir)'"'
         loc subdir `"`r(path)'"'
         * Clean up path (ensure no trailing slashes for consistency)
-        loc subdir : subinstr local subdir "\\" "/", all
+        loc subdir : subinstr local subdir "\" "/", all
         loc subdir : subinstr local subdir "//" "/", all
         if substr(`"`subdir'"', -1, 1) == "/" & ustrlen(`"`subdir'"') > 1 {
             loc subdir = substr(`"`subdir'"', 1, length(`"`subdir'"')-1)
@@ -63,8 +66,12 @@ program define slideviewer, rclass
 
     *-- Parse Input / Keyword Logic
     loc target ""
-    loc cmd = lower(trim(`"`anything'"'))
-    loc cmd : subinstr local cmd ".smcl" "", all
+    * lower() is used only to recognize keywords; a slide name keeps its case
+    loc raw = trim(`"`anything'"')
+    if lower(substr(`"`raw'"', -5, .)) == ".smcl" {
+        loc raw = substr(`"`raw'"', 1, length(`"`raw'"') - 5)
+    }
+    loc cmd = lower(`"`raw'"')
 
     if inlist("`cmd'", "next", "prev", "first", "last", "toc") {
         
@@ -73,7 +80,7 @@ program define slideviewer, rclass
         if "$S_slideviewer_current" != "" {
             loc i = 1
             foreach f in `files' {
-                if "`f'" == "$S_slideviewer_current" {
+                if lower("`f'") == lower("$S_slideviewer_current") {
                     loc current_idx = `i'
                     continue, break
                 }
@@ -110,7 +117,15 @@ program define slideviewer, rclass
             else loc target : word 1 of `files'
         }
         else {
-            loc target "`cmd'.smcl"
+            * Resolve the name against the files on disk without regard to case,
+            * and remember the on-disk spelling
+            loc target "`raw'.smcl"
+            foreach f in `files' {
+                if lower("`f'") == lower("`raw'.smcl") {
+                    loc target "`f'"
+                    continue, break
+                }
+            }
         }
     }
 
@@ -204,7 +219,7 @@ end
 *-- Helper: expand a leading ~ from HOME (or USERPROFILE / HOMEDRIVE+HOMEPATH on Windows)
 program define _sv_expand_home, rclass
     args path
-    if substr(`"`macval(path)'"', 1, 1) == "~" & inlist(substr(`"`macval(path)'"', 2, 1), "", "/", "\\") {
+    if substr(`"`macval(path)'"', 1, 1) == "~" & inlist(substr(`"`macval(path)'"', 2, 1), "", "/", "\") {
         loc home : env HOME
         if "`c(os)'" == "Windows" {
             loc up : env USERPROFILE

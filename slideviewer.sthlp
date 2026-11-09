@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.0.1  9nov2026}{...}
+{* *! version 2.0.2  09nov2026}{...}
 {hline}
 help for {hi:slideviewer}
 {hline}
@@ -19,7 +19,7 @@ It allows for easy traversal of a slide deck stored in a subdirectory, automatic
 generation, and an optional interactive navigation bar.
 
 {p 4 4 2}
-Version 2.0.1 (9 November 2026) is optimized for Stata 16+ and supports UTF-8 encoding.
+Version 2.0.2 (9 November 2026) is optimized for Stata 16+ and supports UTF-8 encoding.
 
 {title:Navigation Keywords}
 
@@ -36,6 +36,11 @@ Instead of a filename, you can use the following keywords:
 {cmd:last} {space 6} Jumps to the alphabetically last slide. {p_end}
 {p 4 8 2}
 {cmd:toc} {space 7} Generates a clickable Table of Contents of all .smcl files in the subdirectory. {p_end}
+
+{p 4 4 2}
+Keywords are not case sensitive. A slide name (with or without {cmd:.smcl}) is matched to the
+file on disk without regard to case, and the on-disk spelling is remembered, so
+{cmd:slideviewer results} opens {it:Results.smcl} and {cmd:next} continues from it.
 
 {title:Options}
 
@@ -55,7 +60,9 @@ verbatim, so macro references such as {cmd:`v'} or {cmd:$S_DATE} and lines with 
 of double quotes appear exactly as written. {p_end}
 
 {p 4 8 2}
-{cmdab:p:ost} stores the name of the current slide in {cmd:r(lastslide)}. {p_end}
+{cmdab:p:ost} stores the name of the current slide in {cmd:r(lastslide)}. It also returns
+{cmd:r(totalscore)}, a copy of the global macro {cmd:$totalscore} (empty unless your tutorial
+slides set it, for example to keep a running quiz score). {p_end}
 
 {p 4 8 2}
 {cmd:clear} resets the persistent state (clears the remembered subdirectory and current slide). {p_end}
@@ -93,7 +100,18 @@ Every slide will now show navigation links at the top and bottom.
 
 {p 8 12 2}{cmd:. slideviewer toc}{p_end}
 
+{title:Stored results}
+
+{p 4 4 2}With {cmd:post}, {cmd:slideviewer} stores in {cmd:r()}:{p_end}
+{p 8 24 2}{cmd:r(lastslide)}{space 4}name of the slide just shown{p_end}
+{p 8 24 2}{cmd:r(totalscore)}{space 3}contents of {cmd:$totalscore}{p_end}
+
 {title:Changes}
+
+{p 4 8 2}2.0.2 (9 November 2026): slide names keep their case and are matched to the file on
+disk without regard to case, so {cmd:next}/{cmd:prev} work after opening a mixed-case slide by
+name and TOC links work on case-sensitive file systems; backslashes in {cmd:subdir()} are
+normalized; standard version line.{p_end}
 
 {p 4 8 2}2.0.1 (9 November 2026): a quoted {cmd:subdir()} (as in the examples) is kept as a path
 instead of being reset to ./ignore; a missing folder is an error; leading {cmd:~} is expanded;

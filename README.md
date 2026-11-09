@@ -11,7 +11,7 @@
 
 `slideviewer` is a powerful navigation tool designed to turn a collection of [SMCL](https://www.stata.com/help.cgi?smcl) files into a professional, interactive presentation or tutorial directly within the Stata Viewer window. 
 
-Version 2.0 is optimized for Stata 16+ and introduces intelligent sequencing, persistent state management, and a dynamic navigation bar—eliminating the need to manually hard-code "Next" and "Previous" links in every individual slide.
+Version 2.0 (current release 2.0.2) is optimized for Stata 16+ and introduces intelligent sequencing, persistent state management, and a dynamic navigation bar—eliminating the need to manually hard-code "Next" and "Previous" links in every individual slide.
 
 ---
 
@@ -73,17 +73,24 @@ slideviewer toc
 | `last` | Jumps to the very last slide. |
 | `toc` | Generates a clickable Table of Contents. |
 
+Keywords are not case sensitive. A slide name is matched to the file on disk without regard to case, and the on-disk spelling is remembered, so `slideviewer results` opens `Results.smcl` and `next` continues from it.
+
 ### Options
 | Option | Description |
 | :--- | :--- |
 | `subdir(path)` | Sets the directory containing your `.smcl` files. Quotes, spaces, and a leading `~` are fine; a folder that does not exist stops with error 601. |
 | `navbar` | Injects interactive [First][Prev][TOC][Next][Last] links. |
+| `post` | Stores the name of the slide just shown in `r(lastslide)` (and the global `$totalscore` in `r(totalscore)`). |
 | `clear` | Resets the persistent subdirectory and current slide state. |
+
+### Stored results
+With `post`: `r(lastslide)` (the slide just shown) and `r(totalscore)` (a copy of the global `$totalscore`, empty unless your tutorial slides set it).
 
 ---
 
 ## Changelog
 
+- **2.0.2 (9 Nov 2026):** slide names keep their case and are matched to the file on disk without regard to case, so `next`/`prev` work after opening a mixed-case slide by name and TOC links work on case-sensitive file systems. Backslashes in `subdir()` are normalized. Standard `*! version` line.
 - **2.0.1 (9 Nov 2026):** a quoted `subdir("myslides")`, as in the examples, is now used as the path (before, it was reset to `./ignore`, giving r(601) or the wrong deck). A missing folder is an error instead of a silent fallback. A leading `~` is expanded. `navbar` copies slide text verbatim, so `` `v' ``, `$S_DATE`, and lines with an unbalanced `"` survive.
 - **2.0 (May 2026):** Stata 16+ rewrite with keywords, TOC, and navbar.
 
