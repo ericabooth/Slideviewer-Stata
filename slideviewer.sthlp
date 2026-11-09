@@ -1,5 +1,5 @@
 {smcl}
-{* May2026}{...}
+{* *! version 2.0.1  9nov2026}{...}
 {hline}
 help for {hi:slideviewer}
 {hline}
@@ -19,7 +19,7 @@ It allows for easy traversal of a slide deck stored in a subdirectory, automatic
 generation, and an optional interactive navigation bar.
 
 {p 4 4 2}
-Version 2.0 is optimized for Stata 16+ and supports UTF-8 encoding.
+Version 2.0.1 (9 November 2026) is optimized for Stata 16+ and supports UTF-8 encoding.
 
 {title:Navigation Keywords}
 
@@ -41,13 +41,18 @@ Instead of a filename, you can use the following keywords:
 
 {p 4 8 2}
 {cmdab:s:ubdir}({it:path}) defines the directory where the .smcl slides are stored. Once set, 
-this path is remembered across calls until changed or cleared. The default is a folder named 
-"ignore" in the current working directory. {p_end}
+this path is remembered across calls until changed or cleared. The path may be quoted, may
+contain spaces, and may start with {cmd:~} (expanded from your home folder). Setting a new
+{cmd:subdir()} starts the deck over. If the folder does not exist, {cmd:slideviewer} stops with
+error 601 rather than falling back to another folder. When no {cmd:subdir()} has been set, the
+default is a folder named "ignore" in the current working directory. {p_end}
 
 {p 4 8 2}
 {cmd:navbar} injects a navigation header and footer into the viewer. This provides clickable 
 links for [First] [Prev] [TOC] [Next] [Last] without needing to modify your individual slide files. 
-It works by generating a temporary SMCL file that wraps your content. {p_end}
+It works by generating a temporary SMCL file that wraps your content. Slide text is copied
+verbatim, so macro references such as {cmd:`v'} or {cmd:$S_DATE} and lines with an odd number
+of double quotes appear exactly as written. {p_end}
 
 {p 4 8 2}
 {cmdab:p:ost} stores the name of the current slide in {cmd:r(lastslide)}. {p_end}
@@ -87,6 +92,12 @@ Every slide will now show navigation links at the top and bottom.
 {dlgtab:Example 3: Creating a custom TOC}
 
 {p 8 12 2}{cmd:. slideviewer toc}{p_end}
+
+{title:Changes}
+
+{p 4 8 2}2.0.1 (9 November 2026): a quoted {cmd:subdir()} (as in the examples) is kept as a path
+instead of being reset to ./ignore; a missing folder is an error; leading {cmd:~} is expanded;
+{cmd:navbar} keeps macro references and unbalanced quotes in slide text.{p_end}
 
 {title:Author}
 

@@ -76,9 +76,16 @@ slideviewer toc
 ### Options
 | Option | Description |
 | :--- | :--- |
-| `subdir(path)` | Sets the directory containing your `.smcl` files. |
+| `subdir(path)` | Sets the directory containing your `.smcl` files. Quotes, spaces, and a leading `~` are fine; a folder that does not exist stops with error 601. |
 | `navbar` | Injects interactive [First][Prev][TOC][Next][Last] links. |
 | `clear` | Resets the persistent subdirectory and current slide state. |
+
+---
+
+## Changelog
+
+- **2.0.1 (9 Nov 2026):** a quoted `subdir("myslides")`, as in the examples, is now used as the path (before, it was reset to `./ignore`, giving r(601) or the wrong deck). A missing folder is an error instead of a silent fallback. A leading `~` is expanded. `navbar` copies slide text verbatim, so `` `v' ``, `$S_DATE`, and lines with an unbalanced `"` survive.
+- **2.0 (May 2026):** Stata 16+ rewrite with keywords, TOC, and navbar.
 
 ---
 
