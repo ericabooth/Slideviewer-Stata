@@ -27,7 +27,11 @@ Version 2.0 (current release 2.0.2) is optimized for Stata 16+ and introduces in
 
 ## 🛠️ Installation
 
-Install from GitHub in Stata:
+```stata
+ssc install slideviewer
+```
+
+To install the development version from this repository instead:
 
 ```stata
 net install slideviewer, from("https://raw.githubusercontent.com/ericabooth/Slideviewer-Stata/main/") replace force
